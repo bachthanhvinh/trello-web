@@ -10,7 +10,8 @@ import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
 import { useState } from 'react'
-
+// import SvgIcon from '@mui/icons-material/PersonAdd'
+import avtHack from '~/assets/hacking.png'
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -33,8 +34,8 @@ export default function AccountMenu() {
             aria-expanded={open ? 'true' : undefined}
           >
             <Avatar sx={{ width: 32, height: 32 }}
-              src=''
-            >M</Avatar>
+              src={avtHack}
+            />
           </IconButton>
         </Tooltip>
       </Box>
