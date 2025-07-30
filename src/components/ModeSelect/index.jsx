@@ -5,6 +5,7 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+
 function ModeSelector() {
   const { mode, setMode } = useColorScheme()
 

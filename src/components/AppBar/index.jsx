@@ -15,6 +15,7 @@ import { Badge, Tooltip } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from '~/components/AppBar/Menus/Profiles'
 import Responsive from '~/components/AppBar/Responsive'
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 
 function AppBar() {
 
@@ -26,7 +27,7 @@ function AppBar() {
         display: { xs: 'none', sm: 'none', md: 'none', lg: 'flex' },
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0px 10px',
+        paddingX: 2,
         gap: 2
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -39,11 +40,11 @@ function AppBar() {
           <Recent />
           <Starred />
           <Templates />
-          <Button variant="outlined">Create</Button>
+          <Button variant="outlined" startIcon={<AddToPhotosIcon />}>Create</Button>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
-          <TextField id="outlined-search" size='small' label="Search" type="search" sx={{ minWidth: '150px' }} />
+          <TextField id="outlined-search" size='small' label="Search..." type="search" sx={{ minWidth: '150px' }} />
           <ModeSelector />
           <Tooltip title="Notifications">
             <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer', color: 'primary.main' }} >
