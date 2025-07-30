@@ -15,6 +15,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
 import { useState } from 'react'
 import MenuIcon from '@mui/icons-material/Menu'
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 
 function Responsive() {
 
@@ -77,7 +78,7 @@ function Responsive() {
             </MenuItem>
           ))}
           <MenuItem>
-            <Button sx={{ textAlign: 'center' }} variant="outlined">Create</Button>
+            <Button sx={{ textAlign: 'center' }} variant="outlined" startIcon={<AddToPhotosIcon />}>Create</Button>
           </MenuItem>
         </Menu>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -89,12 +90,12 @@ function Responsive() {
           <Recent />
           <Starred />
           <Templates />
-          <Button variant="outlined">Create</Button>
+          <Button variant="outlined" startIcon={<AddToPhotosIcon />}>Create</Button>
         </Box>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
-        <TextField id="outlined-search" size='small' label="Search" type="search" sx={{ minWidth: '80px' }} />
+        <TextField id="outlined-search" size='small' label="Search..." type="search" sx={{ minWidth: '80px' }} />
         <Box sx={{ display: { xs: 'none', sm: 'flex', md: 'none' } }}>
           <ModeSelector />
         </Box>
