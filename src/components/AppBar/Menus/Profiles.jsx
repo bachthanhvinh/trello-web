@@ -12,6 +12,7 @@ import Logout from '@mui/icons-material/Logout'
 import { useState } from 'react'
 // import SvgIcon from '@mui/icons-material/PersonAdd'
 import avtHack from '~/assets/hacking.png'
+import ModeSelector from '~/components/ModeSelect'
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -76,6 +77,9 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
+        <MenuItem sx={{ display: { xs: 'flex', sm: 'none', md: 'flex', lg: 'none' } }}>
+          <ModeSelector />
+        </MenuItem>
         <MenuItem onClick={handleClose}>
           <Avatar /> Profile
         </MenuItem>
