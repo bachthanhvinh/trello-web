@@ -34,7 +34,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}
+            <Avatar sx={{ width: 36, height: 36 }}
               src={avtHack}
             />
           </IconButton>
@@ -76,6 +76,11 @@ export default function AccountMenu() {
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        sx={{
+          '& .MuiList-root': {
+            bgcolor:'#9aaec4ff'
+          }
+        }}
       >
         <MenuItem sx={{ display: { xs: 'flex', sm: 'none', md: 'flex', lg: 'none' } }}>
           <ModeSelector />
