@@ -33,8 +33,8 @@ const theme = extendTheme({
       styleOverrides: {
         body: {
           '*::-webkit-scrollbar': {
-            width: '8px',
-            height: '8px'
+            width: '6px',
+            height: '6px'
           },
           '*::-webkit-scrollbar-thumb': {
             backgroundColor: '#dcdde1',
@@ -57,6 +57,13 @@ const theme = extendTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: { fontSize: '0.875rem' }
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          '&.MuiTypography-body1': { fontSize: '0.875rem' }
+        }
       }
     },
     MuiOutlinedInput: {
