@@ -12,7 +12,7 @@ import Logout from '@mui/icons-material/Logout'
 import { useState } from 'react'
 // import SvgIcon from '@mui/icons-material/PersonAdd'
 import avtHack from '~/assets/hacking.png'
-import ModeSelector from '~/components/ModeSelect'
+import ModeSelector from '~/components/ModeSelect/ModeSelect'
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)

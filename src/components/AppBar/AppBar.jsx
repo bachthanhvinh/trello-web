@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import ModeSelector from '~/components/ModeSelect'
+import ModeSelector from '~/components/ModeSelect/ModeSelect'
 import AppsIcon from '@mui/icons-material/Apps'
 import { ReactComponent as TrelloLogo } from '~/assets/trello.svg'
 import SvgIcon from '@mui/material/SvgIcon'
