@@ -12,6 +12,8 @@ import hacking from '~/assets/hacking.png'
 import react from '~/assets/react.svg'
 import trello from '~/assets/trello.svg'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import capitalizeFirstLetter from '~/utils/formatters'
+
 const MENU_STYLES = {
   color: 'white',
   bgcolor: 'transparent',
@@ -25,7 +27,7 @@ const MENU_STYLES = {
   }
 }
 
-function BoardBar() {
+function BoardBar({ board }) {
   return (
     <Box
       sx={{
@@ -46,13 +48,13 @@ function BoardBar() {
         <Chip
           sx={MENU_STYLES}
           icon={<DashboardIcon />}
-          label="Trello Web"
+          label={board?.title}
           clickable
         />
         <Chip
           sx={MENU_STYLES}
           icon={<VpnLockIcon />}
-          label="Public/Workspace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <Chip
