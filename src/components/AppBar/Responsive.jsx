@@ -141,7 +141,7 @@ function Responsive() {
             )
           }}
           sx={{
-            minWidth: '150px',
+            minWidth: '130px',
             '& label': { color: 'white' },
             '& input': { color: 'white' },
             '& label.Mui-focused': { color: 'white' },
@@ -156,12 +156,12 @@ function Responsive() {
           <ModeSelector />
         </Box>
         <Tooltip title="Notifications">
-          <Badge color="warning" variant="dot" sx={{ cursor: 'pointer', color: 'white' }} >
+          <Badge color="warning" variant="dot" sx={{ display: { xs: 'none', sm: 'flex', md: 'none' }, cursor: 'pointer', color: 'white' }} >
             <NotificationsNoneIcon />
           </Badge>
         </Tooltip>
 
-        <Tooltip title="Help" sx={{ cursor: 'pointer', color: 'white' }}>
+        <Tooltip title="Help" sx={{ display: { xs: 'none', sm: 'flex', md: 'none' }, cursor: 'pointer', color: 'white' }}>
           <HelpOutlineIcon />
         </Tooltip>
 
