@@ -7,19 +7,39 @@ import ChatIcon from '@mui/icons-material/Chat'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 
 const Card = ({ card }) => {
 
   const shouldShowCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card._id,
+    data: { ...card }
+  })
+
+  const dndKitCardStyles = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : undefined
+
+  }
+
   return (
     <>
-      <MuiCard sx={{
-        cursor: 'pointer',
-        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'unset'
-      }}>
+      <MuiCard
+        style={dndKitCardStyles}
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        sx={{
+          cursor: 'pointer',
+          boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
+          overflow: 'unset'
+        }}>
         {card?.cover && <CardMedia sx={{ height: 140, borderRadius: '5px 5px 0 0' }} image={card?.cover} title="green iguana" /> }
 
         <CardContent sx={{
