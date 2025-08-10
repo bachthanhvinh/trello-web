@@ -11,6 +11,7 @@ import {
   MouseSensor,
   TouchSensor,
   DragOverlay,
+  closestCorners,
   defaultDropAnimationSideEffects
 } from '@dnd-kit/core'
 import Column from './ListColumns/Column/Column'
@@ -101,7 +102,7 @@ function BoardContent({ board }) {
 
         newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn?.cards?.length + 1
 
-        //Clone Mảng OrderedColumnsState cũ ra một cái cũ để xử lý data rồi return - cập nhật tại 
+        //Clone Mảng OrderedColumnsState cũ ra một cái cũ để xử lý data rồi return - cập nhật tại
         // OrderedColumnsState mới
         const nextColumn = cloneDeep(prevColumns)
         const nextActiveColumn = nextColumn.find(column => column._id === activeColumn._id)
@@ -156,6 +157,7 @@ function BoardContent({ board }) {
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={closestCorners}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
