@@ -1,8 +1,7 @@
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
-import { DndContext, MeasuringStrategy } from '@dnd-kit/core'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import {
   // PointerSensor,
@@ -12,7 +11,12 @@ import {
   TouchSensor,
   DragOverlay,
   closestCorners,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  pointerWithin,
+  DndContext,
+  rectIntersection,
+  getFirstCollision,
+  closestCenter
 } from '@dnd-kit/core'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -45,6 +49,7 @@ function BoardContent({ board }) {
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   const [oldColumn, setOldColumn] = useState(null)
+  const lastOverId = useRef(null)
 
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
@@ -166,6 +171,7 @@ function BoardContent({ board }) {
   }
   //Trigger khi kết thức hành động thả drop
   const handleDragEnd = (event) => {
+
     // console.log('handleDragEnd', event)
     const { active, over } = event
     // kiểm tra nếu không tồn tại over (kéo linh tinh ra ngoài thì return lôn tránh lỗi)
@@ -255,23 +261,57 @@ function BoardContent({ board }) {
     setOldColumn(null)
   }
 
-  const dropAnimation = {
+  const customDropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
       styles: { active: { opacity: '0.5' } } })
   }
 
+  const collisionDetectionStrategy = useCallback((args) => {
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+      return closestCorners({ ...args })
+    }
+
+    // tìm các điểm giao nhau, va chạm - intersections với trỏ chuột
+    const pointerIntersections = pointerWithin(args)
+    // Thuật toán phát hiện va chạm sẽ trả về một mảng các và chạm ở đây
+    const intersections = !!pointerIntersections?.length
+      ? pointerIntersections
+      : rectIntersection(args)
+
+    let overId = getFirstCollision(intersections, 'id')
+
+    if (overId) {
+    // fix flickering
+    // nếu cái over nó là column thì sẽ tìm tới cardId gần nhất bên trong khu vực va chạm đó dựa vào
+    // thuật toán phát hiện va chạm closestCenter hoặc closestCorners đều được.
+      const checkColumn = orderedColumns.find(column => column._id === overId)
+      if (checkColumn) {
+        // console.log('overId before', overId)
+        overId = closestCenter({
+          ...args,
+          droppableContainers: args.droppableContainers.filter(container => {
+            return container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id)
+          })
+        })[0]?.id
+
+        // console.log('overId after', overId)
+      }
+
+      lastOverId.current = overId
+      return [{ id: overId }]
+    }
+
+    return lastOverId.current ? [{ id: lastOverId.current }] : []
+  }, [activeDragItemType, orderedColumns])
+
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={collisionDetectionStrategy}
+      // collisionDetection={closestCorners}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
-      measuring={{
-        droppable: {
-          strategy: MeasuringStrategy.Always
-        }
-      }}
     >
       <Box sx={{
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
@@ -280,7 +320,7 @@ function BoardContent({ board }) {
         p: '5.5px 0'
       }}>
         <ListColumns columns={orderedColumns} />
-        <DragOverlay dropAnimation={dropAnimation}>
+        <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItemData}/>}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && <Card card={activeDragItemData}/>}
