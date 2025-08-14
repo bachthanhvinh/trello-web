@@ -20,7 +20,9 @@ import {
 } from '@dnd-kit/core'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
+import { generatePlaceholderCard } from '~/utils/formatters'
+
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
@@ -88,19 +90,26 @@ function BoardContent({ board }) {
       const nextColumn = cloneDeep(prevColumns)
       const nextActiveColumn = nextColumn.find(column => column._id === activeColumn._id)
       const nextOverColumn = nextColumn.find(column => column._id === overColumn._id)
-
       if (nextActiveColumn) {
         // Khi mà kéo card muốn kéo qua một cái column khác thì xóa card vừa kéo ở column cũ
         nextActiveColumn.cards = nextActiveColumn.cards.filter(card => card._id !== activeDraggingCardId)
+
+        // Thêm Placeholder Card nếu Column rỗng: bị kéo hết Card đi, không còn cái nào nữa.
+        if (isEmpty(nextActiveColumn.cards)) {
+          // console.log('hết card rồi')
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
-        nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(card => card.id)
+        nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(card => card._id)
       }
+
+
       if (nextOverColumn) {
 
         //kiểm tra xem card đang kéo nó có tồn tại ở overColumn chưa, nếu có thì cần xóa nó trước
         nextOverColumn.cards = nextOverColumn.cards.filter(card => card._id !== activeDraggingCardId)
 
-        // Dối vơi tường hợp dragEnd thì phải cập nhật lại chuẩn dữ liệu columnId trong card sau khi kéo card
+        // Đối với trường hợp dragEnd thì phải cập nhật lại chuẩn dữ liệu columnId trong card sau khi kéo card
         // giữa 2 column khác nhau
         const rebuild_activeDraggingCardData = {
           ...activeDraggingCardData,
@@ -109,10 +118,13 @@ function BoardContent({ board }) {
 
         //Thêm card đang kéo vào một column mới mà overColumn kéo vào
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData)
+        // Nếu mà trong column có tồn tại cards rồi thì xóa card Placehoder dữ chỗ đi
+        nextOverColumn.cards = nextOverColumn?.cards.filter(card => card._id !== 'column-id-03-placeholder-card')
 
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
-        nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card.id)
+        nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
+      console.log('nextColumn', nextColumn)
       return nextColumn
     })
   }

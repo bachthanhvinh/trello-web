@@ -109,7 +109,7 @@ function BoardBar({ board }) {
             <Avatar alt="Remy Sharp" src={hacking} />
           </Tooltip>
           <Tooltip title='trello'>
-            <Avatar alt="Remy Sharp" src='https://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-1/435730941_1479298869606519_3434163185530098561_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=103&ccb=1-7&_nc_sid=1d2534&_nc_ohc=7Ht2Ra0_dJwQ7kNvwElYRba&_nc_oc=AdktK2J-PfHdAfgIqwFzG7oprCG3lADcYGtRXcxUwduzk7po0I9J8MRUoK7xspeE0isjX43SDoQpAef4NIEqgZuu&_nc_zt=24&_nc_ht=scontent.fhan14-3.fna&_nc_gid=q7YBAmDM0tErl5iyiQIbHw&oh=00_AfQ7jsMR_Znx9TQMWtLsqGYC6QkDUIMuStvB4qVdxoOPlA&oe=68903298' />
+            <Avatar alt="Remy Sharp" src='https://cdn-icons-png.flaticon.com/512/1144/1144760.png'/>
           </Tooltip>
           <Tooltip title='trello'>
             <Avatar alt="Remy Sharp" src={trello} />

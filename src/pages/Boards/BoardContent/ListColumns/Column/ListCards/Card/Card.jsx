@@ -38,7 +38,11 @@ const Card = ({ card }) => {
         sx={{
           cursor: 'pointer',
           boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-          overflow: 'unset'
+          // overflow: 'unset',
+          // display: card?.FE_PlaceholderCard ? 'none' : 'block'
+          overflow:  card?.FE_PlaceholderCard === true ? 'hidden' : 'unset',
+          height: card?.FE_PlaceholderCard === true ? '0px' : 'unset'
+
         }}>
         {card?.cover && <CardMedia sx={{ height: 140, borderRadius: '5px 5px 0 0' }} image={card?.cover} title="green iguana" /> }
 
