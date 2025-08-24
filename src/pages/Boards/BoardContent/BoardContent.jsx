@@ -124,7 +124,7 @@ function BoardContent({ board }) {
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
-      console.log('nextColumn', nextColumn)
+      // console.log('nextColumn', nextColumn)
       return nextColumn
     })
   }

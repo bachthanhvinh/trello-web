@@ -10,7 +10,7 @@ const ListColumns = ({ columns }) => {
 //All you have to do is map your items array to an array of strings that represent the unique identifiers for each item:
 // https://github.com/clauderic/dnd-kit/issues/183#issuecomment-812569512
   return (
-    <SortableContext items={columns?.map(c => c._id)} strategy={horizontalListSortingStrategy}>
+    <SortableContext items={columns ? columns?.map(c => c._id) : []} strategy={horizontalListSortingStrategy}>
       <Box sx={{
         bgcolor: 'inherit',
         with: '100%',
@@ -30,7 +30,7 @@ const ListColumns = ({ columns }) => {
       }}>
         {/*  box column test 1 */}
 
-        {columns?.map(column => <Column key={column._id} column={column} />) }
+        {columns?.map(column => <Column key={column?._id} column={column} />) }
 
 
         <Box sx={{
