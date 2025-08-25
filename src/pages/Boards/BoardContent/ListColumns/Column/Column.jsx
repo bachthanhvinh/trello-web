@@ -210,6 +210,7 @@ const Column = ({ column }) => {
                 type="text"
                 variant='outlined'
                 autoFocus
+                data-no-dnd='true'
                 value={newCardTitle}
                 onChange={(e) => setNewCardTilte(e.target.value)}
                 sx={{
@@ -237,6 +238,7 @@ const Column = ({ column }) => {
                 }}
               >
                 <Button
+                  data-no-dnd='true'
                   onClick={addNewCard}
                   variant='contained' color='success' size="small"
                   sx={{
