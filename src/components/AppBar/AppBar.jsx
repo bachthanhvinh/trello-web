@@ -68,15 +68,17 @@ function AppBar() {
                 </InputAdornment>
               ),
               endAdornment: (
-                <CloseIcon
-                  onClick={() => setIsInput('')}
-                  fontSize='small'
-                  sx={{
-                    display: isInput ? 'flex' : 'none',
-                    color: 'white',
-                    cursor: 'pointer'
-                  }}
-                />
+                <InputAdornment position="end">
+                  <CloseIcon
+                    onClick={() => setIsInput('')}
+                    fontSize='small'
+                    sx={{
+                      display: isInput ? 'flex' : 'none',
+                      color: 'white',
+                      cursor: 'pointer'
+                    }}
+                  />
+                </InputAdornment>
               )
             }}
             sx={{
