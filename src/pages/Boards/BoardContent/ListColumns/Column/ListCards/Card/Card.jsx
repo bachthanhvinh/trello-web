@@ -10,7 +10,6 @@ import Button from '@mui/material/Button'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-
 const Card = ({ card }) => {
 
   const shouldShowCardActions = () => {
@@ -39,10 +38,11 @@ const Card = ({ card }) => {
           cursor: 'pointer',
           boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
           // overflow: 'unset',
-          // display: card?.FE_PlaceholderCard ? 'none' : 'block'
+          // display: card?.FE_PlaceholderCard ? 'none' : 'block',
           overflow:  card?.FE_PlaceholderCard === true ? 'hidden' : 'unset',
-          height: card?.FE_PlaceholderCard === true ? '0px' : 'unset'
-
+          height: card?.FE_PlaceholderCard === true ? '0px' : 'unset',
+          border: '1px solid transparent',
+          '&:hover': { borderColor: (theme) => theme.palette.primary.main }
         }}>
         {card?.cover && <CardMedia sx={{ height: 140, borderRadius: '5px 5px 0 0' }} image={card?.cover} title="green iguana" /> }
 
