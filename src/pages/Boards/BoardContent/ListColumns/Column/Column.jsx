@@ -25,7 +25,7 @@ import { TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 
 
-const Column = ({ column }) => {
+const Column = ({ column, createNewCard }) => {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -51,16 +51,28 @@ const Column = ({ column }) => {
 
   const [newCardTitle, setNewCardTilte] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please Enter card title', { position: 'bottom-right' })
       return
     }
 
+    const cardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+    await createNewCard(cardData)
+
     setOpenNewCardForm()
     setNewCardTilte('')
   }
 
+  const checkEnterAddCard = (e) => {
+    if (e.key === 'Enter') {
+      addNewCard()
+    }
+
+  }
   const closeFormNewCard = () => {
 
     toggleOpenNewCardForm()
@@ -215,6 +227,7 @@ const Column = ({ column }) => {
                 data-no-dnd='true'
                 value={newCardTitle}
                 onChange={(e) => setNewCardTilte(e.target.value)}
+                onKeyDown={checkEnterAddCard}
                 sx={{
                   '& label': { color: 'text.primary' },
                   '& input': {

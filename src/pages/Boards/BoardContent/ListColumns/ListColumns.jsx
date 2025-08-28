@@ -7,21 +7,32 @@ import { useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast } from 'react-toastify'
 
-const ListColumns = ({ columns }) => {
+const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
 
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('Please Enter column title')
       return
     }
+    const NewColumnData = {
+      title: newColumnTitle
+    }
+    await createNewColumn(NewColumnData)
+
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
+  }
+
+  const enterAddNewColumn = (e) => {
+    if (e.key === 'Enter') {
+      addNewColumn()
+    }
   }
   const closeFormNewColumn = () => {
 
@@ -55,7 +66,12 @@ const ListColumns = ({ columns }) => {
       }}>
         {/*  box column test 1 */}
 
-        {columns?.map(column => <Column key={column?._id} column={column} />) }
+        {columns?.map(column =>
+          <Column
+            key={column?._id}
+            column={column}
+            createNewCard={createNewCard}
+          />) }
 
         { !openNewColumnForm
           ?
@@ -96,6 +112,7 @@ const ListColumns = ({ columns }) => {
               autoFocus
               value={newColumnTitle}
               onChange={(e) => setNewColumnTitle(e.target.value)}
+              onKeyDown={enterAddNewColumn}
               sx={{
                 '& label': { color: 'white' },
                 '& input': { color: 'white' },
