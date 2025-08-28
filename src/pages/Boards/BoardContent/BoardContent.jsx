@@ -30,7 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard }) {
 
   // yêu cầu chuột phải di chuyển 10px với được thực hiện event, fix trường hợp click bị event
   // nếu sử dụng pointerSensor thì phải sử dụng thêm thuộc tính
@@ -339,7 +339,11 @@ function BoardContent({ board }) {
           height: (theme) => theme.trello.boardContentHeight,
           p: '5.5px 0'
         }}>
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItemData}/>}
