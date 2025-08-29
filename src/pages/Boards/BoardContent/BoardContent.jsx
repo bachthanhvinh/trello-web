@@ -30,7 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 
   // yêu cầu chuột phải di chuyển 10px với được thực hiện event, fix trường hợp click bị event
   // nếu sử dụng pointerSensor thì phải sử dụng thêm thuộc tính
@@ -263,9 +263,11 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
 
       const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
       // 2 cái console.log() này để sau này xử lý gọi api
-      // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
-      // console.log('dndOrderedColumns', dndOrderedColumns)
-      // console.log('dndOrderedColumnsIds', dndOrderedColumnsIds)
+
+      moveColumn(dndOrderedColumns)
+
+      // Để lại thằng để khi gọi api bị delay thì sẽ kéo thả như bình thường trước, gọi api thành công Ok nói chũng là setOrderedColumns chỉ là dữ chỗ trước
+      // khi gọi api tranh bị delay do mạng hay gì đó
       setOrderedColumns(dndOrderedColumns)
     }
 
