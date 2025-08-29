@@ -4,7 +4,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsApi, createColumnApi, createCardApi } from '~/apis'
+import { fetchBoardDetailsApi, createColumnApi, createCardApi, updateBoardDetailsApi } from '~/apis'
 import { cloneDeep, isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
 
@@ -57,6 +57,17 @@ function Board() {
     setBoard(cloneBoard)
   }
 
+  const moveColumn = async (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
+
+    const cloneBoard = { ...board }
+    cloneBoard.columns = dndOrderedColumns
+    cloneBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(cloneBoard)
+
+    await updateBoardDetailsApi(cloneBoard._id, { columnOrderIds: dndOrderedColumnsIds })
+  }
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
@@ -65,6 +76,7 @@ function Board() {
         board={board}
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
+        moveColumn={moveColumn}
       />
     </Container>
   )
