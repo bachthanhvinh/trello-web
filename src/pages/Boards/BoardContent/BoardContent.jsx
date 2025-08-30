@@ -30,7 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCards }) {
 
   // yêu cầu chuột phải di chuyển 10px với được thực hiện event, fix trường hợp click bị event
   // nếu sử dụng pointerSensor thì phải sử dụng thêm thuộc tính
@@ -235,22 +235,24 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
         //Dùng arrayMove vì kéo card trong một cái column thì tương tự với logic kéo loumn trong một cái
         // board content
         const dndOrderedCards = arrayMove(oldColumn?.cards, oldCardIndex, newCardIndex)
-        setOrderedColumns(prevColumns => {
 
+        const dndCardOrderIds = dndOrderedCards.map(card => card._id)
+
+        setOrderedColumns(prevColumns => {
           //Clone Mảng OrderedColumnsState cũ ra một cái cũ để xử lý data rồi return - cập nhật tại
           // OrderedColumnsState mới
           const nextColumns = cloneDeep(prevColumns)
-
           const targetColumn = nextColumns.find(column => column._id === overColumn._id)
-
           //Cập nhật lại 2 giắ trị mới là card và carOrderIds trong cái targetColumn
           targetColumn.cards = dndOrderedCards
-          targetColumn.cardOrderIds = dndOrderedCards.map(card => card._id)
+          targetColumn.cardOrderIds = dndCardOrderIds
 
           // trả về vị trí state mới (chuẩn vị trí)
           return nextColumns
         })
-
+        console.log('oldCardIndex', oldCardIndex)
+        console.log('newCardIndex', newCardIndex)
+        moveCards(dndOrderedCards, dndCardOrderIds, oldColumn)
       }
 
     }
@@ -263,12 +265,11 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 
       const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
       // 2 cái console.log() này để sau này xử lý gọi api
-
-      moveColumn(dndOrderedColumns)
-
       // Để lại thằng để khi gọi api bị delay thì sẽ kéo thả như bình thường trước, gọi api thành công Ok nói chũng là setOrderedColumns chỉ là dữ chỗ trước
       // khi gọi api tranh bị delay do mạng hay gì đó
       setOrderedColumns(dndOrderedColumns)
+
+      moveColumns(dndOrderedColumns)
     }
 
     setActiveDragItemId(null)

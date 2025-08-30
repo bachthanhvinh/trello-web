@@ -51,17 +51,17 @@ const Column = ({ column, createNewCard }) => {
 
   const [newCardTitle, setNewCardTilte] = useState('')
 
-  const addNewCard = async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error('Please Enter card title', { position: 'bottom-right' })
       return
     }
 
-    const cardData = {
+    const newCardData = {
       title: newCardTitle,
       columnId: column._id
     }
-    await createNewCard(cardData)
+    createNewCard(newCardData)
 
     setOpenNewCardForm()
     setNewCardTilte('')
