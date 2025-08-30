@@ -57,7 +57,7 @@ function Board() {
     setBoard(cloneBoard)
   }
 
-  const moveColumn = async (dndOrderedColumns) => {
+  const moveColumns = (dndOrderedColumns) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
 
     const cloneBoard = { ...board }
@@ -65,7 +65,11 @@ function Board() {
     cloneBoard.columnOrderIds = dndOrderedColumnsIds
     setBoard(cloneBoard)
 
-    await updateBoardDetailsApi(cloneBoard._id, { columnOrderIds: dndOrderedColumnsIds })
+    updateBoardDetailsApi(cloneBoard._id, { columnOrderIds: dndOrderedColumnsIds })
+  }
+
+  const moveCards = (dndOrderedCards, dndCardOrderIds, columnId ) => {
+
   }
 
   return (
@@ -76,7 +80,8 @@ function Board() {
         board={board}
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
-        moveColumn={moveColumn}
+        moveColumns={moveColumns}
+        moveCards={moveCards}
       />
     </Container>
   )
