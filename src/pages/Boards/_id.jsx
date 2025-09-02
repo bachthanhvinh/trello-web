@@ -2,11 +2,13 @@ import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-// import { mockData } from '~/apis/mock-data'
+import CircularProgress from '@mui/material/CircularProgress'
 import { useEffect, useState } from 'react'
 import { fetchBoardDetailsApi, createColumnApi, createCardApi, updateBoardDetailsApi } from '~/apis'
 import { cloneDeep, isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
+import { mapOrder } from '~/utils/sorts'
+import { Box, Typography } from '@mui/material'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -15,10 +17,15 @@ function Board() {
     const boardId = '68af27bc1c40c6814fa2d5e6'
 
     fetchBoardDetailsApi(boardId).then(board => {
+
+      board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
+
       board.columns.forEach(column => {
         if (isEmpty(column.cards)) {
           column.cards = [generatePlaceholderCard(column)]
           column.cardOrderIds = [generatePlaceholderCard(column)._id]
+        } else {
+          column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
         }
       })
       setBoard(board)
@@ -69,7 +76,32 @@ function Board() {
   }
 
   const moveCards = (dndOrderedCards, dndCardOrderIds, columnId ) => {
+    const cloneBoard = cloneDeep(board)
+    const columnToUpdate = cloneBoard.columns.find(column => column._id === columnId._id)
+    if (columnToUpdate) {
+      columnToUpdate.cards = dndOrderedCards
+      columnToUpdate.cardOrderIds = dndCardOrderIds
+    }
+    setBoard(cloneBoard)
 
+    // updateColumnDetailsApi(columnId._id, { cardOrderIds: dndCardOrderIds })
+  }
+
+  if (!board) {
+    return (
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+        width: '100vw',
+        height: '100vh'
+      }}
+      >
+        <CircularProgress />
+        <Typography>Loading board...</Typography>
+      </Box>
+    )
   }
 
   return (

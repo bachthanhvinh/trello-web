@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/sorts'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import {
@@ -56,7 +55,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumns(board.columns)
   }, [board])
 
   // Tìm một cái Column theo cardId
@@ -250,8 +249,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
           // trả về vị trí state mới (chuẩn vị trí)
           return nextColumns
         })
-        console.log('oldCardIndex', oldCardIndex)
-        console.log('newCardIndex', newCardIndex)
+
         moveCards(dndOrderedCards, dndCardOrderIds, oldColumn)
       }
 
