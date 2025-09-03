@@ -29,7 +29,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCards }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCards, moveCardToDifferentColumn }) {
 
   // yêu cầu chuột phải di chuyển 10px với được thực hiện event, fix trường hợp click bị event
   // nếu sử dụng pointerSensor thì phải sử dụng thêm thuộc tính
@@ -65,6 +65,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
     return orderedColumns.find(column => column?.cards?.map(card => card?._id)?.includes(cardId))
   }
 
+  // Khỏi tạo trước khi kéo 2 columms khác nhau
   const moveCardBetweentDifferentColumns = (
     overColumn,
     overCardId,
@@ -72,7 +73,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    TriggerDragEnd
   ) => {
     setOrderedColumns(prevColumns => {
       // Tìm bị trí (index) của cái overCard trong column đích nơi mà activeCard sắp được đặt
@@ -126,6 +128,16 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
       // console.log('nextColumn', nextColumn)
+
+      if (TriggerDragEnd === 'handleDragEnd') {
+        moveCardToDifferentColumn(
+          activeDraggingCardId,
+          oldColumn._id,
+          nextOverColumn._id,
+          nextColumn
+        )
+      }
+
       return nextColumn
     })
   }
@@ -223,7 +235,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         )
       } else {
         // Lấy vị trí cũ (từ  oldColumn)
