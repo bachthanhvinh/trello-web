@@ -4,7 +4,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsApi, createColumnApi, createCardApi, updateBoardDetailsApi } from '~/apis'
+import { fetchBoardDetailsApi, createColumnApi, createCardApi, updateBoardDetailsApi, MoveCardToDifferentColumnsApi } from '~/apis'
 import { cloneDeep, isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { mapOrder } from '~/utils/sorts'
@@ -87,6 +87,25 @@ function Board() {
     // updateColumnDetailsApi(columnId._id, { cardOrderIds: dndCardOrderIds })
   }
 
+  const moveCardToDifferentColumn = (currentCard, prevOldColumns, nextColumns, dndOrderedColumns) => {
+
+    const dndColumnOrderedIds = dndOrderedColumns.map(c => c._id)
+    const cloneBoard = { ...board }
+    cloneBoard.columns = dndOrderedColumns
+    cloneBoard.columnOrderIds = dndColumnOrderedIds
+    setBoard(cloneBoard)
+
+    MoveCardToDifferentColumnsApi({
+      currentCard,
+      prevOldColumns,
+      prevCardOrderIds: dndOrderedColumns.find(c => c._id === prevOldColumns)?.cardOrderIds,
+      nextColumns,
+      nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumns)?.cardOrderIds
+    }
+
+    )
+  }
+
   if (!board) {
     return (
       <Box sx={{
@@ -114,6 +133,7 @@ function Board() {
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCards={moveCards}
+        moveCardToDifferentColumn={moveCardToDifferentColumn}
       />
     </Container>
   )
