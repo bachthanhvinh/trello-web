@@ -101,9 +101,7 @@ function Board() {
       prevCardOrderIds: dndOrderedColumns.find(c => c._id === prevOldColumns)?.cardOrderIds,
       nextColumns,
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumns)?.cardOrderIds
-    }
-
-    )
+    })
   }
 
   if (!board) {
