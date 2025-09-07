@@ -122,12 +122,11 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         //Thêm card đang kéo vào một column mới mà overColumn kéo vào
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData)
         // Nếu mà trong column có tồn tại cards rồi thì xóa card Placehoder dữ chỗ đi
-        nextOverColumn.cards = nextOverColumn?.cards.filter(card => card._id !== 'column-id-03-placeholder-card')
+        nextOverColumn.cards = nextOverColumn?.cards.filter(card => !card.FE_PlaceholderCard)
 
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
-      // console.log('nextColumn', nextColumn)
 
       if (TriggerDragEnd === 'handleDragEnd') {
         moveCardToDifferentColumn(

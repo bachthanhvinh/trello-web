@@ -4,7 +4,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsApi, createColumnApi, createCardApi, updateBoardDetailsApi, MoveCardToDifferentColumnsApi } from '~/apis'
+import { fetchBoardDetailsApi, createColumnApi, createCardApi, updateBoardDetailsApi, MoveCardToDifferentColumnsApi, updateColumnDetailsApi } from '~/apis'
 import { cloneDeep, isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { mapOrder } from '~/utils/sorts'
@@ -45,6 +45,7 @@ function Board() {
     newBoard.columns.push(createdColumn)
     newBoard.columnOrderIds.push(createdColumn._id)
     setBoard(newBoard)
+
   }
 
   const createNewCard = async (newCard) => {
@@ -55,13 +56,19 @@ function Board() {
 
     const cloneBoard = cloneDeep(board)
     const columnToUpdate = cloneBoard.columns.find( column => column._id === createdCard.columnId )
-    if (columnToUpdate) {
-      columnToUpdate.cards = columnToUpdate.cards || []
-      columnToUpdate.cardOrderIds = columnToUpdate.cardOrderIds || []
+
+    if (columnToUpdate.cards.some(card => card.FE_PlaceholderCard)) {
+      columnToUpdate.cards = [createdCard]
+      columnToUpdate.cardOrderIds = [createdCard._id]
+
+    } else {
       columnToUpdate.cards.push(createdCard)
       columnToUpdate.cardOrderIds.push(createdCard._id)
     }
+
     setBoard(cloneBoard)
+    console.log('columnToUpdate', columnToUpdate)
+
   }
 
   const moveColumns = (dndOrderedColumns) => {
@@ -84,7 +91,7 @@ function Board() {
     }
     setBoard(cloneBoard)
 
-    // updateColumnDetailsApi(columnId._id, { cardOrderIds: dndCardOrderIds })
+    updateColumnDetailsApi(columnId._id, { cardOrderIds: dndCardOrderIds })
   }
 
   const moveCardToDifferentColumn = (currentCard, prevOldColumns, nextColumns, dndOrderedColumns) => {
@@ -95,14 +102,20 @@ function Board() {
     cloneBoard.columnOrderIds = dndColumnOrderedIds
     setBoard(cloneBoard)
 
+    let prevCardOrderIds = dndOrderedColumns.find(c => c._id === prevOldColumns)?.cardOrderIds
+    // nếu kéo hết card ra khỏi column thì cần check để không đẩy placeholder-card lên api gây lỗi
+    if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
+
+
     MoveCardToDifferentColumnsApi({
       currentCard,
       prevOldColumns,
-      prevCardOrderIds: dndOrderedColumns.find(c => c._id === prevOldColumns)?.cardOrderIds,
+      prevCardOrderIds,
       nextColumns,
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumns)?.cardOrderIds
     })
   }
+  console.log('board', board)
 
   if (!board) {
     return (
