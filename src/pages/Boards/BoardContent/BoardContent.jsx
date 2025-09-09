@@ -29,8 +29,16 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCards, moveCardToDifferentColumn }) {
-
+function BoardContent(props) {
+  const {
+    board,
+    createNewColumn,
+    createNewCard,
+    moveColumns,
+    moveCards,
+    moveCardToDifferentColumn,
+    deleteColumnAndCard
+  } = props
   // yêu cầu chuột phải di chuyển 10px với được thực hiện event, fix trường hợp click bị event
   // nếu sử dụng pointerSensor thì phải sử dụng thêm thuộc tính
   // CSS touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
@@ -356,6 +364,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
           columns={orderedColumns}
           createNewColumn={createNewColumn}
           createNewCard={createNewCard}
+          deleteColumnAndCard={deleteColumnAndCard}
         />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
