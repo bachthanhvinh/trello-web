@@ -4,14 +4,24 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsApi, createColumnApi, createCardApi, updateBoardDetailsApi, MoveCardToDifferentColumnsApi, updateColumnDetailsApi } from '~/apis'
+import {
+  fetchBoardDetailsApi,
+  createColumnApi,
+  createCardApi,
+  updateBoardDetailsApi,
+  MoveCardToDifferentColumnsApi,
+  updateColumnDetailsApi,
+  deleteColumnAndCardApi
+} from '~/apis'
 import { cloneDeep, isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { mapOrder } from '~/utils/sorts'
 import { Box, Typography } from '@mui/material'
+import { toast } from 'react-toastify'
 
 function Board() {
   const [board, setBoard] = useState(null)
+
 
   useEffect( () => {
     const boardId = '68af27bc1c40c6814fa2d5e6'
@@ -67,7 +77,6 @@ function Board() {
     }
 
     setBoard(cloneBoard)
-    console.log('columnToUpdate', columnToUpdate)
 
   }
 
@@ -115,7 +124,22 @@ function Board() {
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumns)?.cardOrderIds
     })
   }
-  console.log('board', board)
+
+
+  const deleteColumnAndCard = (columnId) => {
+
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(c => c._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
+    setBoard(newBoard)
+
+
+    deleteColumnAndCardApi(columnId).then(res => {
+      toast.success(res?.deleteResult)
+    }
+    )
+  }
+
 
   if (!board) {
     return (
@@ -145,6 +169,7 @@ function Board() {
         moveColumns={moveColumns}
         moveCards={moveCards}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
+        deleteColumnAndCard={deleteColumnAndCard}
       />
     </Container>
   )
