@@ -23,9 +23,15 @@ import CloseIcon from '@mui/icons-material/Close'
 import { TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
+import { createCardApi, deleteColumnAndCardApi } from '~/apis'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { cloneDeep } from 'lodash'
 
-
-const Column = ({ column, createNewCard, deleteColumnAndCard }) => {
+const Column = ({ column }) => {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -46,12 +52,14 @@ const Column = ({ column, createNewCard, deleteColumnAndCard }) => {
   const handleClick = (event) => {setAnchorEl(event.currentTarget)}
   const handleClose = () => {setAnchorEl(null)}
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
+  const [newCardTitle, setNewCardTilte] = useState('')
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
 
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
-  const [newCardTitle, setNewCardTilte] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please Enter card title', { position: 'bottom-right' })
       return
@@ -61,7 +69,25 @@ const Column = ({ column, createNewCard, deleteColumnAndCard }) => {
       title: newCardTitle,
       columnId: column._id
     }
-    createNewCard(newCardData)
+
+    const createdCard = await createCardApi({
+      ...newCardData,
+      boardId: board._id
+    })
+    // cái này cũng tương tự sử dụng Deep copy
+    const cloneBoard = cloneDeep(board)
+    const columnToUpdate = cloneBoard.columns.find( column => column._id === createdCard.columnId )
+
+    if (columnToUpdate.cards.some(card => card.FE_PlaceholderCard)) {
+      columnToUpdate.cards = [createdCard]
+      columnToUpdate.cardOrderIds = [createdCard._id]
+
+    } else {
+      columnToUpdate.cards.push(createdCard)
+      columnToUpdate.cardOrderIds.push(createdCard._id)
+    }
+
+    dispatch(updateCurrentActiveBoard(cloneBoard))
 
     setOpenNewCardForm()
     setNewCardTilte('')
@@ -93,7 +119,17 @@ const Column = ({ column, createNewCard, deleteColumnAndCard }) => {
       // confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
       // buttonOrder: ['confirm', 'cancel']
     }).then(() => {
-      deleteColumnAndCard(column._id)
+
+      const newBoard = { ...board }
+      newBoard.columns = newBoard.columns.filter(c => c._id !== column._id)
+      newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== column._id)
+      dispatch(updateCurrentActiveBoard(newBoard))
+
+      deleteColumnAndCardApi(column._id).then(res => {
+        toast.success(res?.deleteResult)
+      }
+      )
+
     }
     ).catch(() => {})
 
@@ -200,11 +236,13 @@ const Column = ({ column, createNewCard, deleteColumnAndCard }) => {
               <Divider />
               <MenuItem sx={{
                 '&:hover': { color: 'warning.dark', transition: '0.5s', '& .delete-forever-icon': { color: 'warning.dark', transition: '0.5s' } }
-              }}>
-                <ListItemIcon>
+              }}
+              onClick={() => handleDeleteColumn()}
+              >
+                <ListItemIcon >
                   <DeleteForeverIcon className='delete-forever-icon' fontSize="small" />
                 </ListItemIcon>
-                <ListItemText onClick={() => handleDeleteColumn()} > Remove this column</ListItemText>
+                <ListItemText > Remove this column</ListItemText>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>

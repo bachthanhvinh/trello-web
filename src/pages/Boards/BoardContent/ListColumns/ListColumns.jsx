@@ -6,15 +6,25 @@ import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortabl
 import { useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast } from 'react-toastify'
+import { generatePlaceholderCard } from '~/utils/formatters'
+import { createColumnApi } from '~/apis'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { cloneDeep } from 'lodash'
 
-const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnAndCard }) => {
+const ListColumns = ({ columns }) => {
 
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('Please Enter column title')
       return
@@ -22,8 +32,20 @@ const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnAndC
     const NewColumnData = {
       title: newColumnTitle
     }
-    createNewColumn(NewColumnData)
 
+    const createdColumn = await createColumnApi({
+      ...NewColumnData,
+      boardId: board._id
+    })
+    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+
+    // sử dụng Deep copy (cloneDeep(board)) thay thì shallow copy ({ ...board }) để không bị lỗi
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -70,8 +92,6 @@ const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnAndC
           <Column
             key={column?._id}
             column={column}
-            createNewCard={createNewCard}
-            deleteColumnAndCard={deleteColumnAndCard}
           />) }
 
         { !openNewColumnForm
