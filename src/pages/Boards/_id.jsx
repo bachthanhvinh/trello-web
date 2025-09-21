@@ -17,6 +17,7 @@ import {
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 function Board() {
   const dispatch = useDispatch()
@@ -24,12 +25,11 @@ function Board() {
   // const [board, setBoard] = useState(null)
   const board = useSelector(selectCurrentActiveBoard)
 
-
+  const { boardId } = useParams()
   useEffect( () => {
-    const boardId = '68c19236c00be1c92fe3ab14'
 
     dispatch(fetchBoardDtailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
 
   const moveColumns = (dndOrderedColumns) => {
