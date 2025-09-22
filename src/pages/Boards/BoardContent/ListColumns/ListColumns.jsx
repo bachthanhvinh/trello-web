@@ -96,15 +96,16 @@ const ListColumns = ({ columns }) => {
 
         { !openNewColumnForm
           ?
-          <Box onClick={toggleOpenNewColumnForm} sx={{
-            minWidth: '250px',
-            maxWidth: '250px',
-            mx: 2,
-            borderRadius: '6px',
-            height: 'fit-content',
-            bgcolor: '#ffffff3d',
-            cursor: 'pointer'
-          }}
+          <Box onClick={toggleOpenNewColumnForm}
+            sx={{
+              minWidth: '250px',
+              maxWidth: '250px',
+              mx: 2,
+              borderRadius: '6px',
+              height: 'fit-content',
+              bgcolor: '#ffffff3d',
+              cursor: 'pointer'
+            }}
           >
             <Button startIcon={<NoteAddIcon />} sx={{
               color: 'white',
@@ -153,6 +154,7 @@ const ListColumns = ({ columns }) => {
               }}
             >
               <Button
+                className="interceptor-loading"
                 onClick={addNewColumn}
                 variant='contained' color='success' size='small'
                 sx={{

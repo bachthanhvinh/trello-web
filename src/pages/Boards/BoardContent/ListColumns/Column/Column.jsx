@@ -204,7 +204,7 @@ const Column = ({ column }) => {
                 <ListItemIcon>
                   <AddCardIcon className='add-card-icon' fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Add new card</ListItemText>
+                <ListItemText >Add new card</ListItemText>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>
@@ -319,6 +319,7 @@ const Column = ({ column }) => {
                 }}
               >
                 <Button
+                  className="interceptor-loading"
                   data-no-dnd='true'
                   onClick={addNewCard}
                   variant='contained' color='success' size="small"
