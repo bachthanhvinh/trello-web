@@ -12,9 +12,9 @@ import {
 import { cloneDeep } from 'lodash'
 import { Box, Typography } from '@mui/material'
 import {
-  fetchBoardDtailsAPI,
   updateCurrentActiveBoard,
-  selectCurrentActiveBoard
+  selectCurrentActiveBoard,
+  fetchBoardDetailsAPI
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -28,7 +28,7 @@ function Board() {
   const { boardId } = useParams()
   useEffect( () => {
 
-    dispatch(fetchBoardDtailsAPI(boardId))
+    dispatch(fetchBoardDetailsAPI(boardId))
   }, [dispatch, boardId])
 
 
