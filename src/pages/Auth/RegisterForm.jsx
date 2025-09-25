@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
@@ -19,9 +19,11 @@ import {
 } from '~/utils/validators'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { useForm } from 'react-hook-form'
+import { registerUserAPI } from '~/apis'
+import { toast } from 'react-toastify'
 
 function RegisterForm() {
-
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -30,7 +32,13 @@ function RegisterForm() {
   } = useForm()
 
   const submitRegister = (data) => {
-    console.log(data)
+    const { email, password } = data
+    toast.promise(
+      registerUserAPI({ email, password }),
+      { pending: 'Registration is in progress...' }
+    ).then(user => {
+      navigate(`/login?registeredEmail=${user.email}`)
+    })
   }
 
   return (
@@ -47,7 +55,7 @@ function RegisterForm() {
             <Avatar sx={{ bgcolor: 'primary.main' }}><TrelloIcon /></Avatar>
           </Box>
           <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', color: theme => theme.palette.grey[500] }}>
-            Author: VinDev
+            Trello Web
           </Box>
           <Box sx={{ padding: '0 1em 1em 1em' }}>
             <Box sx={{ marginTop: '1em' }}>
@@ -76,8 +84,8 @@ function RegisterForm() {
                 label="Enter Password..."
                 type="password"
                 variant="outlined"
-                error={!!errors['pasword']}
-                {...register('pasword', {
+                error={!!errors['password']}
+                {...register('password', {
                   required: FIELD_REQUIRED_MESSAGE,
                   pattern: {
                     value: PASSWORD_RULE,
@@ -86,7 +94,7 @@ function RegisterForm() {
                 }
                 )}
               />
-              <FieldErrorAlert errors={errors} fieldName={'pasword'} />
+              <FieldErrorAlert errors={errors} fieldName={'password'} />
             </Box>
             <Box sx={{ marginTop: '1em' }}>
               <TextField
@@ -94,16 +102,16 @@ function RegisterForm() {
                 label="Enter Password Confirmation..."
                 type="password"
                 variant="outlined"
-                error={!!errors['paswordConfirmation']}
-                {...register('paswordConfirmation', {
+                error={!!errors['passwordConfirmation']}
+                {...register('passwordConfirmation', {
                   validate: (value) => {
-                    if (value === watch('pasword')) return true
+                    if (value === watch('password')) return true
                     return PASSWORD_CONFIRMATION_MESSAGE
                   }
                 }
                 )}
               />
-              <FieldErrorAlert errors={errors} fieldName={'paswordConfirmation'} />
+              <FieldErrorAlert errors={errors} fieldName={'passwordConfirmation'} />
             </Box>
           </Box>
           <CardActions sx={{ padding: '0 1em 1em 1em' }}>
