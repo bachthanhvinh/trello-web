@@ -37,7 +37,7 @@ function LoginForm() {
       dispatch(loginUserAPI({ email, password })),
       { pending: 'logging...' }
     ).then( res => {
-      console.log(res)
+      // console.log(res)
       // Đoàn này phải kiểm tra không có lỗi(login thành công) thì mới redirect vè route
       if (!res.error) navigate('/')
     })
@@ -46,7 +46,7 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
-        <MuiCard sx={{ minWidth: 380, maxWidth: 380}}>
+        <MuiCard sx={{ minWidth: 380, maxWidth: 380 }}>
           <Box sx={{
             margin: '1em',
             display: 'flex',
