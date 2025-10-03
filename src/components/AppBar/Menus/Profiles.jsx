@@ -15,6 +15,7 @@ import ModeSelector from '~/components/ModeSelect/ModeSelect'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentUser, logoutUserAPI } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
+import { Link } from 'react-router-dom'
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -103,9 +104,11 @@ export default function AccountMenu() {
         <MenuItem sx={{ display: { xs: 'flex', sm: 'none', md: 'flex', lg: 'none' } }}>
           <ModeSelector />
         </MenuItem>
-        <MenuItem >
-          <Avatar sx={{ width: 28, height: 28, mr: 2 }} src={currentUser?.avatar} alt='avatar' /> Profile
-        </MenuItem>
+        <Link to={'/settings/account'} style={{ color: 'inherit'}} >
+          <MenuItem >
+            <Avatar sx={{ width: 28, height: 28, mr: 2 }} src={currentUser?.avatar} alt='avatar' /> Profile
+          </MenuItem>
+        </Link>
         <Divider />
         <MenuItem >
           <ListItemIcon>

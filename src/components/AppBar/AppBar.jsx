@@ -19,6 +19,7 @@ import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function AppBar() {
   const [isInput, setIsInput] = useState('')
@@ -36,10 +37,12 @@ function AppBar() {
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <AppsIcon sx={{ color: 'white' }} />
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <SvgIcon component={TrelloLogo} inheritViewBox fontSize='small' sx={{ color: 'white' }} />
-            <Typography variant='span' sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }} >Trello</Typography>
-          </Box>
+          <Link to={'/'}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <SvgIcon component={TrelloLogo} inheritViewBox fontSize='small' sx={{ color: 'white' }} />
+              <Typography variant='span' sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }} >Trello</Typography>
+            </Box>
+          </Link>
           <Workspaces />
           <Recent />
           <Starred />

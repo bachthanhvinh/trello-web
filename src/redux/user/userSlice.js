@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { autoBatchEnhancer, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
@@ -17,6 +17,7 @@ export const loginUserAPI = createAsyncThunk(
     return response.data
   }
 )
+
 export const logoutUserAPI = createAsyncThunk(
   'user/logoutUserAPI',
   async (showSuccessMessage = true) => {
@@ -28,6 +29,13 @@ export const logoutUserAPI = createAsyncThunk(
   }
 )
 
+export const updateUserAPI = createAsyncThunk(
+  'user/updateUserAPI',
+  async (data) => {
+    const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/update`, data)
+    return response.data
+  }
+)
 // Khởi tạo một cái Slice trong kho lưu trữ Redux
 export const userSlice = createSlice({
   name: 'user',
@@ -47,6 +55,10 @@ export const userSlice = createSlice({
        * kết hợp ProtectedRoute Đã làm ở App.js => code sẽ điều hướng về trang login
        */
       state.currentUser = null
+    })
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      const user = action.payload
+      state.currentUser = user
     })
   }
 })
