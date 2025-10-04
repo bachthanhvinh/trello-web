@@ -17,19 +17,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentUser, updateUserAPI } from '~/redux/user/userSlice'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { ButtonBase } from '@mui/material'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
 
 // Xử lý custom đẹp cái input file ở đây: https://mui.com/material-ui/react-button/#file-upload
 // Ngoài ra note thêm lib này từ docs của MUI nó recommend nếu cần dùng: https://github.com/viclafouch/mui-file-input
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
-  height: 1,
+  height: '5px',
   overflow: 'hidden',
   position: 'absolute',
   bottom: 0,
   left: 0,
   whiteSpace: 'nowrap',
-  width: 1
+  width: '5px'
 })
 
 function AccountTab() {
@@ -65,7 +67,7 @@ function AccountTab() {
 
   const uploadAvatar = (e) => {
     // Lấy file thông qua e.target?.files[0] và validate nó trước khi xử lý
-    console.log('e.target?.files[0]: ', e.target?.files[0])
+    // console.log('e.target?.files[0]: ', e.target?.files[0])
     const error = singleFileValidator(e.target?.files[0])
     if (error) {
       toast.error(error)
@@ -76,12 +78,24 @@ function AccountTab() {
     let reqData = new FormData()
     reqData.append('avatar', e.target?.files[0])
     // Cách để log được dữ liệu thông qua FormData
-    console.log('reqData: ', reqData)
-    for (const value of reqData.values()) {
-      console.log('reqData Value: ', value)
-    }
+    // console.log('reqData: ', reqData)
+    // for (const value of reqData.values()) {
+    //   console.log('reqData Value: ', value)
+    // }
 
     // Gọi API...
+    toast.promise(
+      dispatch(updateUserAPI(reqData)),
+      { pending: 'Updating...' }
+    ).then( res => {
+
+      if (!res.error) {
+        toast.success(' User updated successfully!')
+      }
+    })
+    // lưu ý, dù có lỗi hoặc thành công thì cũng phải clear giá trị của file input, nếu không thì
+    // sẽ không thể chọn cùng một file liên tiếp được
+    e.target.value=''
   }
 
   return (
@@ -100,27 +114,106 @@ function AccountTab() {
         justifyContent: 'center',
         gap: 3
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Box>
-            <Avatar
-              sx={{ width: 84, height: 84, mb: 1 }}
-              alt="TrungQuanDev"
-              src={currentUser?.avatar}
-            />
-            <Tooltip title="Upload a new image to update your avatar immediately.">
-              <Button
-                component="label"
-                variant="contained"
-                size="small"
-                startIcon={<CloudUploadIcon />}>
-                Upload
-                <VisuallyHiddenInput type="file" onChange={uploadAvatar} />
-              </Button>
-            </Tooltip>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, position: 'relative' }}>
+          <Box className='container' sx={{
+            position: 'relative',
+            width: '50%',
+            '&.container:hover .overlay': {
+              opacity: 1
+            }
+          }}>
+            <ButtonBase
+              component="label"
+              role={undefined}
+              tabIndex={-1} // prevent label from tab focus
+              aria-label="Avatar image"
+              sx={{
+                borderRadius: '999999px',
+                '&:has(:focus-visible)': {
+                  outline: '2px solid',
+                  outlineOffset: '2px'
+                }
+              }}
+            >
+              <Avatar
+                sx={{
+                  width: 84,
+                  height: 84,
+                  mb: 1,
+                  border: '3px solid #a8a2e8ff'
+                }}
+                alt="TrungQuanDev"
+                src={currentUser?.avatar}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                style={{
+                  border: 0,
+                  clip: 'rect(0 0 0 0)',
+                  height: '1px',
+                  margin: '-1px',
+                  overflow: 'hidden',
+                  padding: 0,
+                  position: 'absolute',
+                  whiteSpace: 'nowrap',
+                  width: '1px'
+                }}
+                onChange={uploadAvatar}
+              />
+              <Box className="overlay" sx={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: '90%',
+                width: '100%',
+                borderRadius: '9999px',
+                opacity: 0,
+                transition: '.5s ease',
+                bgcolor: '#4748486c'
+              }}>
+                <Box className="text" sx={{
+                  color: 'white',
+                  fontSize: '20px',
+                  position: 'absolute',
+                  top: '57%',
+                  left: '50%',
+                  WebkitTransform: 'translate(-50%, -50%)',
+                  msTransform: 'translate(-50%, -50%)',
+                  transform: 'translate(-50%, -50%)',
+                  textAlign: 'center'
+                }}>
+                  <CloudUploadIcon sx={{ color: 'black' }} />
+                </Box>
+              </Box>
+            </ButtonBase>
           </Box>
+
           <Box>
             <Typography variant="h6">{currentUser?.displayName}</Typography>
             <Typography sx={{ color: 'grey' }}>@{currentUser?.username}</Typography>
+          </Box>
+          <Box className='uploadImage' sx={{ position: 'absolute', top: '53px', right: '160px' }}>
+            <Tooltip title="Upload a new image to update your avatar immediately.">
+              <label >
+                <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '25px',
+                  height: '25px',
+                  borderRadius: '9999px',
+                  border: '1.5px solid white',
+                  bgcolor: '#dcd4d4ff',
+                  cursor: 'pointer'
+                }} >
+                  <CameraAltIcon sx={{ color: 'black', fontSize: '16px' }} />
+                </Box>
+                <VisuallyHiddenInput type="file" onChange={uploadAvatar} />
+              </label>
+            </Tooltip>
           </Box>
         </Box>
 
