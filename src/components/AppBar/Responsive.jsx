@@ -18,6 +18,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
+import { Link } from 'react-router-dom'
+import AppsIcon from '@mui/icons-material/Apps'
 
 function Responsive() {
   const [isInput, setIsInput] = useState('')
@@ -97,6 +99,9 @@ function Responsive() {
           </MenuItem>
         </Menu>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <Tooltip title="Board list">
+            <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+          </Tooltip>
           <SvgIcon component={TrelloLogo} inheritViewBox fontSize='small' sx={{ color: 'white' }} />
           <Typography variant='span' sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }} >Trello</Typography>
         </Box>
