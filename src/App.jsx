@@ -23,7 +23,7 @@ function App() {
       {/* Redirect Route */}
       <Route path='/' element={
         // ở đây cần replace giá trị true để nó thay thế route /, có thể hiểu là route / sẽ không còn nằm trong history của Brower
-        <Navigate to='/boards/68c19236c00be1c92fe3ab14' replace={true} />
+        <Navigate to='/boards' replace={true} />
       } />
       {/* Protected Routes Hiểu đơn giản trong dự án của là những route chỉ cho truy cập sau khi
       đã login */}
