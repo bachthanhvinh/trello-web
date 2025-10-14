@@ -23,13 +23,14 @@ import CloseIcon from '@mui/icons-material/Close'
 import { TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
-import { createCardApi, deleteColumnAndCardApi } from '~/apis'
+import { createCardApi, deleteColumnAndCardApi, updateColumnDetailsApi } from '~/apis'
 import {
   updateCurrentActiveBoard,
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 
 const Column = ({ column }) => {
 
@@ -135,6 +136,16 @@ const Column = ({ column }) => {
 
   }
 
+  const onUpdateColumnTitle = (newTitle) => {
+
+    updateColumnDetailsApi(column._id, { title: newTitle }).then(() => {
+      const cloneBoard = cloneDeep(board)
+      const columnToUpdate = cloneBoard.columns.find(c => c._id === column._id)
+      if (columnToUpdate) columnToUpdate.title = newTitle
+
+      dispatch(updateCurrentActiveBoard(cloneBoard))
+    })
+  }
 
   const orderedCards = column.cards
 
@@ -164,11 +175,12 @@ const Column = ({ column }) => {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <Typography variant='h6' sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            cursor: 'pointer'
-          }} > {column?.title} </Typography>
+
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={onUpdateColumnTitle}
+            data-no-dnd='true'
+          />
           {/* Box column Header  */}
           <Box>
             <Tooltip title="More Options">
