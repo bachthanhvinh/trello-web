@@ -5,14 +5,10 @@ import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
 import { Button, Tooltip } from '@mui/material'
-import hacking from '~/assets/hacking.png'
-import react from '~/assets/react.svg'
-import trello from '~/assets/trello.svg'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import capitalizeFirstLetter from '~/utils/formatters'
+import BoardUserGroup from './BoardUserGroup'
 
 const MENU_STYLES = {
   color: 'white',
@@ -91,35 +87,9 @@ function BoardBar({ board }) {
         >
           Invite
         </Button>
-        <AvatarGroup
-          max={4}
-          sx={{
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              fontSize: 16,
-              border: 'none',
-              cursor: 'pointer',
-              '&:first-of-type': { bgcolor: '#a4b0be' }
-            }
-          }}
-        >
-          <Tooltip title='trello'>
-            <Avatar alt="Remy Sharp" src='https://cdn-icons-png.flaticon.com/512/1144/1144760.png' />
-          </Tooltip>
-          <Tooltip title='hacking'>
-            <Avatar alt="Remy Sharp" src={hacking} />
-          </Tooltip>
-          <Tooltip title='trello'>
-            <Avatar alt="Remy Sharp" src='https://cdn-icons-png.flaticon.com/512/1144/1144760.png'/>
-          </Tooltip>
-          <Tooltip title='trello'>
-            <Avatar alt="Remy Sharp" src={trello} />
-          </Tooltip>
-          <Tooltip title='react'>
-            <Avatar alt="Remy Sharp" src={react} />
-          </Tooltip>
-        </AvatarGroup>
+
+        <BoardUserGroup />
+
       </Box>
     </Box>
   )

@@ -9,8 +9,13 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useDispatch } from 'react-redux'
+import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Card = ({ card }) => {
+
+  const dispatch = useDispatch()
+
 
   const shouldShowCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
@@ -27,9 +32,15 @@ const Card = ({ card }) => {
     border: isDragging ? '1px solid #4a69bd' : undefined
   }
 
+  const setActiveCard = () => {
+    // cập nhật data cho cái activeCard tron redux
+    dispatch(updateCurrentActiveCard(card))
+  }
+
   return (
     <>
       <MuiCard
+        onClick={setActiveCard}
         style={dndKitCardStyles}
         ref={setNodeRef}
         {...attributes}

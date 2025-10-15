@@ -1,3 +1,4 @@
+import { cardMediaClasses } from '@mui/material'
 import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
@@ -64,5 +65,10 @@ export const fetchBoardsAPI = async (searchPath) => {
 export const createNewBoardAPI = async (data) => {
   const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/boards`, data)
   toast.success('Board created successfuly')
+  return response.data
+}
+
+export const updateCardDetailsAPI = async (cardId, updateData) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, updateData)
   return response.data
 }
