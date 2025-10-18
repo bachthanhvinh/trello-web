@@ -78,3 +78,4 @@ export const InviteUserToBoardAPI = async (data) => {
   toast.success('User invited to board successfully')
   return response.data
 }
+
