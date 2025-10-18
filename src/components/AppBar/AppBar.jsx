@@ -10,8 +10,7 @@ import Recent from '~/components/AppBar/Menus/Recent'
 import Starred from './Menus/Starred'
 import Templates from './Menus/Templates'
 import TextField from '@mui/material/TextField'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import { Badge, InputAdornment, Tooltip } from '@mui/material'
+import { InputAdornment, Tooltip } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from '~/components/AppBar/Menus/Profiles'
 import Responsive from '~/components/AppBar/Responsive'
@@ -20,6 +19,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Notifications from './Notifications/Notifications'
 
 function AppBar() {
   const [isInput, setIsInput] = useState('')
@@ -100,12 +100,11 @@ function AppBar() {
               }
             }}
           />
+          {/* Dark - light - System  modes */}
           <ModeSelector />
-          <Tooltip title="Notifications">
-            <Badge color="warning" variant="dot" sx={{ cursor: 'pointer', color: 'white' }} >
-              <NotificationsNoneIcon />
-            </Badge>
-          </Tooltip>
+
+          {/* Xử lý hiện thị các thông báo - notificatios ở đây */}
+          <Notifications />
 
           <Tooltip title="Help" sx={{ cursor: 'pointer', color: 'white' }}>
             <HelpOutlineIcon />

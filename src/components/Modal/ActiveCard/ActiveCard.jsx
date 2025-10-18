@@ -64,7 +64,7 @@ function ActiveCard() {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
   const isShowModalActiveCard = useSelector(selectIsShowModalActiveCard)
-  console.log('activeCard', activeCard)
+
   // const [isOpen, setIsOpen] = useState(true)
   // const handleOpenModal = () => setIsOpen(true)
 
