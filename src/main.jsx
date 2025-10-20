@@ -25,11 +25,18 @@ const persistor = persistStore(store)
 import { InjectStore } from './utils/authorizeAxios'
 import { GlobalStyles } from '@mui/material'
 InjectStore(store)
+
+// Cấu ình socket-io pphias client tại đây và export ra biến socketIoInstance
+import { io } from 'socket.io-client'
+import { API_ROOT } from './utils/constants'
+export const socketIoInstance = io(API_ROOT)
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
-  <BrowserRouter basename='/'>
-    <Provider store={store}>
-      <PersistGate persistor={ persistor }>
+  <Provider store={store}>
+    <PersistGate persistor={ persistor }>
+      <BrowserRouter basename='/'>
         <CssVarsProvider theme={theme}>
           <ConfirmProvider defaultOptions={{
             allowClose: false,
@@ -44,8 +51,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <ToastContainer theme="colored" position="bottom-left" />
           </ConfirmProvider>
         </CssVarsProvider>
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
   // {/* </React.StrictMode> */}
 )

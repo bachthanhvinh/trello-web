@@ -9,8 +9,7 @@ import Recent from '~/components/AppBar/Menus/Recent'
 import Starred from './Menus/Starred'
 import Templates from './Menus/Templates'
 import TextField from '@mui/material/TextField'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import { Badge, IconButton, InputAdornment, Menu, MenuItem, Tooltip } from '@mui/material'
+import { IconButton, InputAdornment, Menu, MenuItem, Tooltip } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
 import { useState } from 'react'
@@ -18,8 +17,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
-import { Link } from 'react-router-dom'
 import AppsIcon from '@mui/icons-material/Apps'
+import Notifications from './Notifications/Notifications'
 
 function Responsive() {
   const [isInput, setIsInput] = useState('')
@@ -160,11 +159,8 @@ function Responsive() {
         <Box sx={{ display: { xs: 'none', sm: 'flex', md: 'none' } }}>
           <ModeSelector />
         </Box>
-        <Tooltip title="Notifications">
-          <Badge color="warning" variant="dot" sx={{ display: { xs: 'none', sm: 'flex', md: 'none' }, cursor: 'pointer', color: 'white' }} >
-            <NotificationsNoneIcon />
-          </Badge>
-        </Tooltip>
+        {/* Xử lý hiện thị các thông báo - notificatios ở đây */}
+        <Notifications />
 
         <Tooltip title="Help" sx={{ display: { xs: 'none', sm: 'flex', md: 'none' }, cursor: 'pointer', color: 'white' }}>
           <HelpOutlineIcon />
