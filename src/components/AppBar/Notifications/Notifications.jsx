@@ -15,11 +15,15 @@ import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  addNotification,
   fetchInvitationsAPI,
   selectCurrentNotifications,
   updateBoardInvitationAPI
 } from '~/redux/notifications/notificationsSlice'
-import { ClosedCaptionDisabledTwoTone } from '@mui/icons-material'
+import { socketIoInstance } from '~/main'
+import { selectCurrentUser } from '~/redux/user/userSlice'
+import { useNavigate } from 'react-router-dom'
+
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -28,28 +32,60 @@ const BOARD_INVITATION_STATUS = {
 }
 
 function Notifications() {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClickNotificationIcon = (event) => {
     setAnchorEl(event.currentTarget)
+
+    // khi click và phần icon thông báo thì set lại trạng thái của biến newNotification về false
+    setNewNotification(false)
   }
   const handleClose = () => {
     setAnchorEl(null)
   }
 
+  // kiểm tra xem có thông báo mới không
+  const [newNotification, setNewNotification] = useState(false)
+
+  // lấy dữ liệu user từ trong redux
+  const currentUser = useSelector(selectCurrentUser)
   // lấy dữ liệu  notification từ trong redux
   const notifications = useSelector(selectCurrentNotifications)
   // Fetch danh sách các lời mới nvitations
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchInvitationsAPI())
-  }, [dispatch])
+
+    // Tạo một cái function xử lý khi nhận được sự kiện real-time
+    const onReceiveNewInvitation = (invitation) => {
+      // Nếu thằng user đang đăng nhập hiện tịa mà chúng ta lưu trong redux chính là thằng invitee trong bản ghi invitation
+      if (invitation.inviteeId === currentUser._id) {
+        //bước 1: thêm bản ghi invitaition mới vào trong redux
+        dispatch(addNotification(invitation))
+        // Bước 2: Cập nhật trạng thái đang có thông báo đến
+        setNewNotification(true)
+
+      }
+
+    }
+
+    // lắng nghe một cái sự kiện real-time có tên là BE_USER_INVITED_TO_BOARD từ phía server gửi về
+    socketIoInstance.on('BE_USER_INVITED_TO_BOARD', onReceiveNewInvitation)
+
+    // Clean up evnet dể ngăn chặn việc bị đăng ký lặp lại event
+    return () => {
+      socketIoInstance.off('BE_USER_INVITED_TO_BOARD', onReceiveNewInvitation)
+    }
+  }, [dispatch, currentUser._id])
 
   // cập nhật trạng thái - status của một cái lời mời join board
   const updateBoardInvitation = (status, invitationId) => {
     dispatch(updateBoardInvitationAPI({ status, invitationId }))
       .then(res => {
-        console.log(res)
+        if (res.payload.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED) {
+          navigate(`/boards/${res.payload.boardInvitation.boardId}`)
+        }
       })
   }
 
@@ -59,7 +95,7 @@ function Notifications() {
         <Badge
           color="warning"
           // variant="none"
-          variant="dot"
+          variant={newNotification ? 'dot' : 'note' }
           sx={{ cursor: 'pointer' }}
           id="basic-button-open-notification"
           aria-controls={open ? 'basic-notification-drop-down' : undefined}
@@ -68,7 +104,7 @@ function Notifications() {
           onClick={handleClickNotificationIcon}
         >
           <NotificationsNoneIcon sx={{
-            color: 'white'
+            color:  newNotification ? 'yellow' : 'white'
           }} />
         </Badge>
       </Tooltip>
@@ -128,7 +164,7 @@ function Notifications() {
                   {notification.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED &&
                     <Chip icon={<DoneIcon />} label="Accepted" color="success" size="small" />
                   }
-                  {notification.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED &&
+                  {notification.boardInvitation.status === BOARD_INVITATION_STATUS.REJECTED &&
                     <Chip icon={<NotInterestedIcon />} label="Rejected" size="small" />
                   }
                 </Box>
