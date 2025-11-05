@@ -1,4 +1,3 @@
-import { cardMediaClasses } from '@mui/material'
 import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'

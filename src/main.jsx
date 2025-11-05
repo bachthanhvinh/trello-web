@@ -26,11 +26,6 @@ import { InjectStore } from './utils/authorizeAxios'
 import { GlobalStyles } from '@mui/material'
 InjectStore(store)
 
-// Cấu ình socket-io pphias client tại đây và export ra biến socketIoInstance
-import { io } from 'socket.io-client'
-import { API_ROOT } from './utils/constants'
-export const socketIoInstance = io(API_ROOT)
-
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
