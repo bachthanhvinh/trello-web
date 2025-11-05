@@ -20,7 +20,7 @@ import {
   selectCurrentNotifications,
   updateBoardInvitationAPI
 } from '~/redux/notifications/notificationsSlice'
-import { socketIoInstance } from '~/main'
+import { socketIoInstance } from '~/socketClient'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useNavigate } from 'react-router-dom'
 
@@ -54,6 +54,7 @@ function Notifications() {
   const notifications = useSelector(selectCurrentNotifications)
   // Fetch danh sách các lời mới nvitations
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(fetchInvitationsAPI())
 
