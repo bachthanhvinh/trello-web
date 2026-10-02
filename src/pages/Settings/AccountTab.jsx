@@ -198,7 +198,7 @@ function AccountTab() {
                 }} >
                   <CameraAltIcon sx={{ color: 'black', fontSize: '16px' }} />
                 </Box>
-                <VisuallyHiddenInput type="file" onChange={uploadAvatar} />
+                <VisuallyHiddenInput data-testid="avatar-file-input" type="file" onChange={uploadAvatar} />
               </label>
             </Tooltip>
           </Box>
@@ -265,6 +265,7 @@ function AccountTab() {
 
             <Box>
               <Button
+                data-testid="account-update-button"
                 className="interceptor-loading"
                 type="submit"
                 variant="contained"

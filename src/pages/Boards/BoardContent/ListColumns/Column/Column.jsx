@@ -151,6 +151,7 @@ const Column = ({ column }) => {
 
   return (
     <div
+      data-testid={`column-${column._id}`}
       style={dndkitColumnStyles}
       ref={setNodeRef}
       {...attributes}
@@ -177,6 +178,7 @@ const Column = ({ column }) => {
         }}>
 
           <ToggleFocusInput
+            data-testid="column-title-input"
             value={column?.title}
             onChangedValue={onUpdateColumnTitle}
             data-no-dnd='true'
@@ -185,6 +187,7 @@ const Column = ({ column }) => {
           <Box>
             <Tooltip title="More Options">
               <ExpandMoreIcon
+                data-testid="open-column-menu-button"
                 sx={{
                   color: 'text.primary',
                   cursor: 'pointer'
@@ -246,10 +249,12 @@ const Column = ({ column }) => {
                 </Typography>
               </MenuItem>
               <Divider />
-              <MenuItem sx={{
-                '&:hover': { color: 'warning.dark', transition: '0.5s', '& .delete-forever-icon': { color: 'warning.dark', transition: '0.5s' } }
-              }}
-              onClick={() => handleDeleteColumn()}
+              <MenuItem
+                data-testid="remove-column-menu-item"
+                sx={{
+                  '&:hover': { color: 'warning.dark', transition: '0.5s', '& .delete-forever-icon': { color: 'warning.dark', transition: '0.5s' } }
+                }}
+                onClick={() => handleDeleteColumn()}
               >
                 <ListItemIcon >
                   <DeleteForeverIcon className='delete-forever-icon' fontSize="small" />
@@ -284,7 +289,7 @@ const Column = ({ column }) => {
               alignItems: 'center',
               justifyContent: 'space-between'
             }}>
-              <Button onClick={toggleOpenNewCardForm} startIcon={<AddCardIcon />}>Add new Card</Button>
+              <Button data-testid="open-add-card-form-button" onClick={toggleOpenNewCardForm} startIcon={<AddCardIcon />}>Add new Card</Button>
               <Tooltip title='Drag to move' >
                 <DragHandleIcon sx={{ cursor: 'pointer' }} />
               </Tooltip>
@@ -297,6 +302,7 @@ const Column = ({ column }) => {
               gap: 1
             }}>
               <TextField
+                data-testid="new-card-title-input"
                 size='small'
                 label="Enter card title..."
                 type="text"
@@ -331,6 +337,7 @@ const Column = ({ column }) => {
                 }}
               >
                 <Button
+                  data-testid="submit-new-card-button"
                   className="interceptor-loading"
                   data-no-dnd='true'
                   onClick={addNewCard}

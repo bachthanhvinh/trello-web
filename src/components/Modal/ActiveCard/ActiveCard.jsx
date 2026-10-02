@@ -127,25 +127,27 @@ function ActiveCard() {
       open={isShowModalActiveCard}
       onClose={handleCloseModal} // Sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
       sx={{ overflowY: 'auto' }}>
-      <Box sx={{
-        position: 'relative',
-        width: 900,
-        maxWidth: 900,
-        bgcolor: 'white',
-        boxShadow: 24,
-        borderRadius: '8px',
-        border: 'none',
-        outline: 0,
-        padding: '40px 20px 20px',
-        margin: '50px auto',
-        backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
-      }}>
+      <Box
+        data-testid="active-card-modal"
+        sx={{
+          position: 'relative',
+          width: 900,
+          maxWidth: 900,
+          bgcolor: 'white',
+          boxShadow: 24,
+          borderRadius: '8px',
+          border: 'none',
+          outline: 0,
+          padding: '40px 20px 20px',
+          margin: '50px auto',
+          backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1A2027' : '#fff'
+        }}>
         <Box sx={{
           position: 'absolute',
           top: '12px',
           right: '10px',
           cursor: 'pointer'
-        }}>
+        }} data-testid="card-modal-close-button">
           <CancelIcon color="black" sx={{ '&:hover': { color: 'error.light' } }} onClick={handleCloseModal} />
         </Box>
 
@@ -165,6 +167,7 @@ function ActiveCard() {
 
           {/* Feature 01: Xử lý tiêu đề của Card */}
           <ToggleFocusInput
+            data-testid="card-title-input"
             inputFontSize='22px'
             value={activeCard?.title}
             onChangedValue={onUpdateCardTitle} />

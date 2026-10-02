@@ -25,6 +25,7 @@ function ModeSelector() {
         }}
       >Mode</InputLabel>
       <Select
+        data-testid="theme-mode-select"
         labelId="select-dark-light-mode"
         id="select=dark-light-mode"
         value={mode}
@@ -38,17 +39,17 @@ function ModeSelector() {
           '.MuiSvgIcon-root': { color: 'white' }
         }}
       >
-        <MenuItem value='light'>
+        <MenuItem data-testid="theme-mode-option-light" value='light'>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} >
             <LightModeIcon fontSize='small' /> Light
           </Box>
         </MenuItem>
-        <MenuItem value='dark'>
+        <MenuItem data-testid="theme-mode-option-dark" value='dark'>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} >
             <SettingsBrightnessIcon fontSize='small' /> Dark
           </Box>
         </MenuItem>
-        <MenuItem value='system'>
+        <MenuItem data-testid="theme-mode-option-system" value='system'>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} >
             <DarkModeOutlinedIcon fontSize='small'/> System
           </Box>

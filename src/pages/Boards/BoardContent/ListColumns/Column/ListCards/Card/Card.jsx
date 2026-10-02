@@ -43,6 +43,7 @@ const Card = ({ card }) => {
   return (
     <>
       <MuiCard
+        data-testid={`card-${card._id}`}
         onClick={setActiveCard}
         style={dndKitCardStyles}
         ref={setNodeRef}

@@ -45,6 +45,7 @@ function InviteBoardUser({ boardId }) {
     <Box>
       <Tooltip title="Invite user to this board!">
         <Button
+          data-testid="board-invite-button"
           aria-describedby={popoverId}
           onClick={handleTogglePopover}
           variant="outlined"
@@ -69,6 +70,7 @@ function InviteBoardUser({ boardId }) {
             <Typography variant="span" sx={{ fontWeight: 'bold', fontSize: '16px' }}>Invite User To This Board!</Typography>
             <Box>
               <TextField
+                data-testid="board-invite-email-input"
                 autoFocus
                 fullWidth
                 label="Enter email to invite..."
@@ -85,6 +87,7 @@ function InviteBoardUser({ boardId }) {
 
             <Box sx={{ alignSelf: 'flex-end' }}>
               <Button
+                data-testid="board-invite-submit"
                 className="interceptor-loading"
                 type="submit"
                 variant="contained"

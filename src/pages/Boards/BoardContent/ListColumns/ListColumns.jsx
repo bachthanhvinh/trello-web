@@ -96,7 +96,7 @@ const ListColumns = ({ columns }) => {
 
         { !openNewColumnForm
           ?
-          <Box onClick={toggleOpenNewColumnForm}
+          <Box data-testid="add-new-column-toggle-button" onClick={toggleOpenNewColumnForm}
             sx={{
               minWidth: '250px',
               maxWidth: '250px',
@@ -127,6 +127,7 @@ const ListColumns = ({ columns }) => {
             gap: 1
           }}>
             <TextField
+              data-testid="new-column-title-input"
               size='small'
               label="Enter column title..."
               type="text"
@@ -154,6 +155,7 @@ const ListColumns = ({ columns }) => {
               }}
             >
               <Button
+                data-testid="submit-new-column-button"
                 className="interceptor-loading"
                 onClick={addNewColumn}
                 variant='contained' color='success' size='small'

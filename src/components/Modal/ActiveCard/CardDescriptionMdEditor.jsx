@@ -41,6 +41,7 @@ function CardDescriptionMdEditor({ cardDescriptionProp, handleUpdateCardDescript
             />
           </Box>
           <Button
+            data-testid="card-description-save-button"
             sx={{ alignSelf: 'flex-end' }}
             onClick={updateCardDescription}
             className="interceptor-loading"
@@ -53,6 +54,7 @@ function CardDescriptionMdEditor({ cardDescriptionProp, handleUpdateCardDescript
         </Box>
         : <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Button
+            data-testid="card-description-edit-button"
             sx={{ alignSelf: 'flex-end' }}
             onClick={() => setMarkdownEditMode(true)}
             type="button"
